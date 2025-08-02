@@ -13,21 +13,21 @@ The project will be hosted on github.io.
 
 ### User Details to Track
 When the user adds a person, they should be able to direclty enter:
-* First Names
-* Lsat Names
-* Birthdate (YYYY, YYYY-MM, or YYYY-MM-DD format)
-* Death (YYYY, YYYY-MM, or YYYY-MM-DD format)
-* Birth location
-* Death location
-* Gender
+* First Names (At least one character if used)
+* Lsat Names - Required (At least one character)
+* Date of Birth (YYYY, YYYY-MM, or YYYY-MM-DD format) - Required
+* Date of Death (YYYY, YYYY-MM, or YYYY-MM-DD format if used)
+* Birth location (At least one character if used)
+* Death location (At least one character if used)
+* Gender - Required
 
 Once the person is added, their record should be given a numeric integer ID number. 
 
 ### Editing details
 Once the user is added the user can edit the person to select the parent and partner. The parent and partner should be selectable by pull-down menu showing:
-* ID number
-* Last names
-* First names
+* ID Number
+* Last Names
+* First Names
 * Date of Birth
 * Date of Death
 
