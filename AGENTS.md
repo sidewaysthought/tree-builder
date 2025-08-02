@@ -26,13 +26,15 @@ Once the person is added, their record should be given a numeric integer ID numb
 ### Editing details
 Once the user is added the user can edit the person to select the parent and partner. The parent and partner should be selectable by pull-down menu showing:
 * ID number
-* Last names,
-* First names,
-* Birth Year
-* Death Year
+* Last names
+* First names
+* Date of Birth
+* Date of Death
 
 ## Repository Layout
 * Place all web-facing files in the /web/ folder.
+
+### Web Folder Structure
 * /web/index.html - Main page
 * /web/style.css - Custom CSS
 * /web/app.js - App JS
@@ -43,5 +45,11 @@ A GitHub automatin is implemented to automatically host the /web/ folder.
 
 ## Technical Standards
 * All user interfaces must meet WCAG 2.1 AA.
+* Implement with HTML or CSS features before implementing with JavaScript
+
+## User Experience
+* Use a neutral color theme
+* Primary action buttons should have light text on dark background
+* Secondary action buttons should have dark text on light background
 * Use Tailwind as a user interface, theaming and component system
 * Use both icons and labels for items a user will interact with
