@@ -15,6 +15,7 @@ The project will be hosted on github.io.
 When the user adds a person, they should be able to direclty enter:
 * First Names (At least one character if used)
 * Lsat Names - Required (At least one character)
+* Maiden Name - (At least one character)
 * Date of Birth (YYYY, YYYY-MM, or YYYY-MM-DD format) - Required
 * Date of Death (YYYY, YYYY-MM, or YYYY-MM-DD format if used)
 * Birth location (At least one character if used)
