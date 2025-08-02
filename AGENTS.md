@@ -53,3 +53,5 @@ A GitHub automatin is implemented to automatically host the /web/ folder.
 * Secondary action buttons should have dark text on light background
 * Use Tailwind as a user interface, theaming and component system
 * Use both icons and labels for items a user will interact with
+* Use a Close button (also bound to the Escape key) to close panels
+* The primary action button should be triggerable using the Enter/Return key
