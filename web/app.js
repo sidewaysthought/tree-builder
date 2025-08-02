@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const emptyBtn = document.getElementById('empty-btn');
   const exportBtn = document.getElementById('export-btn');
   const importBtn = document.getElementById('import-btn');
-  const overlay = document.getElementById('overlay');
   const drawer = document.getElementById('drawer');
   const form = document.getElementById('person-form');
   const cancelBtn = document.getElementById('cancel-btn');
@@ -114,45 +113,20 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
       idInput.value = '';
     }
-    overlay.classList.remove('hidden');
-    overlay.setAttribute('aria-hidden', 'false');
-    drawer.classList.remove('translate-y-full');
+    drawer.showModal();
     firstNamesInput.focus();
   }
 
   function closeDrawer() {
-    overlay.classList.add('hidden');
-    overlay.setAttribute('aria-hidden', 'true');
-    drawer.classList.add('translate-y-full');
-    addBtn.focus();
-  }
-
-  function maskDateInput(e) {
-    let v = e.target.value.replace(/\D/g, '').slice(0, 8);
-    let result = '';
-    if (v.length > 0) {
-      result = v.slice(0, 4);
-      if (v.length > 4) {
-        result += '-' + v.slice(4, 6);
-        if (v.length > 6) {
-          result += '-' + v.slice(6, 8);
-        }
-      }
-    }
-    e.target.value = result;
+    drawer.close();
   }
 
   addBtn.addEventListener('click', openDrawer);
   cancelBtn.addEventListener('click', closeDrawer);
-  overlay.addEventListener('click', closeDrawer);
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      closeDrawer();
-    }
-  });
 
-  birthDateInput.addEventListener('input', maskDateInput);
-  deathDateInput.addEventListener('input', maskDateInput);
+  drawer.addEventListener('close', () => {
+    addBtn.focus();
+  });
 
   form.addEventListener('submit', e => {
     e.preventDefault();
