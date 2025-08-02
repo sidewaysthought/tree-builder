@@ -1,1 +1,4 @@
 /* Custom styles for Family Tree Builder */
+.drawer {
+  transition: transform 0.3s ease-in-out;
+}

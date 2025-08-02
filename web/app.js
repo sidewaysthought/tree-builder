@@ -1,13 +1,22 @@
 let people = [];
 let nextId = 1;
 
+const addBtn = document.getElementById('add-btn');
+const emptyBtn = document.getElementById('empty-btn');
+const exportBtn = document.getElementById('export-btn');
+const importBtn = document.getElementById('import-btn');
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
 const form = document.getElementById('person-form');
-const list = document.getElementById('people-list');
-const saveBtn = document.getElementById('save-btn');
-const openBtn = document.getElementById('open-btn');
+const cancelBtn = document.getElementById('cancel-btn');
+const tableBody = document.getElementById('people-body');
 
-form.addEventListener('submit', event => {
-  event.preventDefault();
+addBtn.addEventListener('click', openDrawer);
+cancelBtn.addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
   const data = new FormData(form);
   const person = {
     id: nextId++,
@@ -22,18 +31,15 @@ form.addEventListener('submit', event => {
   people.push(person);
   renderPeople();
   form.reset();
+  closeDrawer();
 });
 
-list.addEventListener('click', event => {
-  const button = event.target.closest('button[data-action="delete"]');
-  if (button) {
-    const id = parseInt(button.dataset.id, 10);
-    people = people.filter(p => p.id !== id);
-    renderPeople();
-  }
+emptyBtn.addEventListener('click', () => {
+  people = [];
+  renderPeople();
 });
 
-saveBtn.addEventListener('click', () => {
+exportBtn.addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(people, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -43,7 +49,7 @@ saveBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-openBtn.addEventListener('click', () => {
+importBtn.addEventListener('click', () => {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'application/json';
@@ -69,22 +75,27 @@ openBtn.addEventListener('click', () => {
 });
 
 function renderPeople() {
-  list.innerHTML = '';
+  tableBody.innerHTML = '';
   for (const person of people) {
-    const li = document.createElement('li');
-    li.className = 'p-4 flex justify-between items-center';
-    li.innerHTML = `
-      <div>
-        <p class="font-medium">${person.firstName} ${person.lastName}</p>
-        <p class="text-sm text-gray-600">ID: ${person.id}</p>
-      </div>
-      <button data-action="delete" data-id="${person.id}" class="inline-flex items-center text-red-600" aria-label="Delete person ${person.id}">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-        <span class="ml-1">Delete</span>
-      </button>
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="px-4 py-2">${person.id}</td>
+      <td class="px-4 py-2">${person.firstName}</td>
+      <td class="px-4 py-2">${person.lastName}</td>
     `;
-    list.appendChild(li);
+    tableBody.appendChild(tr);
   }
 }
+
+function openDrawer() {
+  overlay.classList.remove('hidden');
+  drawer.classList.remove('translate-y-full');
+}
+
+function closeDrawer() {
+  overlay.classList.add('hidden');
+  drawer.classList.add('translate-y-full');
+}
+
+renderPeople();
+
