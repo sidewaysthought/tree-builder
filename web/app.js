@@ -23,6 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const idInput = document.getElementById('person-id');
   const heading = document.getElementById('add-person-heading');
 
+  function saveData() {
+    localStorage.setItem('people', JSON.stringify(people));
+  }
+
+  function loadData() {
+    const stored = localStorage.getItem('people');
+    if (stored) {
+      try {
+        people = JSON.parse(stored);
+        nextId = people.reduce((max, p) => Math.max(max, p.id), 0) + 1;
+      } catch (err) {
+        console.error('Failed to parse stored data', err);
+        people = [];
+      }
+    }
+  }
+
   function renderPeople() {
     tableBody.innerHTML = '';
     for (const person of people) {
@@ -75,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (p.parent2Id === id) p.parent2Id = undefined;
           if (p.partnerId === id) p.partnerId = undefined;
         }
+        saveData();
         renderPeople();
       });
     });
@@ -166,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       people.push(person);
     }
+    saveData();
     renderPeople();
     form.reset();
     closeDrawer();
@@ -174,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
   emptyBtn.addEventListener('click', () => {
     people = [];
     nextId = 1;
+    localStorage.clear();
     renderPeople();
   });
 
@@ -182,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'family.json';
+    a.download = 'family.tree.json';
     a.click();
     URL.revokeObjectURL(url);
   });
@@ -190,10 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
   importBtn.addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'application/json';
+    input.accept = '.tree.json,application/json';
     input.onchange = e => {
       const file = e.target.files[0];
-      if (!file) return;
+      if (!file || !file.name.endsWith('.tree.json')) {
+        console.error('Invalid file type');
+        return;
+      }
       const reader = new FileReader();
       reader.onload = ev => {
         try {
@@ -201,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (Array.isArray(data)) {
             people = data;
             nextId = data.reduce((max, p) => Math.max(max, p.id), 0) + 1;
+            saveData();
             renderPeople();
           }
         } catch (err) {
@@ -212,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.click();
   });
 
+  loadData();
   renderPeople();
 });
 
