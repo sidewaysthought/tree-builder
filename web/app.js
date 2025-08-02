@@ -29,12 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openDrawer() {
     overlay.classList.remove('hidden');
+    overlay.setAttribute('aria-hidden', 'false');
     drawer.classList.remove('translate-y-full');
+    document.getElementById('first-name').focus();
   }
 
   function closeDrawer() {
     overlay.classList.add('hidden');
+    overlay.setAttribute('aria-hidden', 'true');
     drawer.classList.add('translate-y-full');
+    addBtn.focus();
   }
 
   function maskDateInput(e) {
@@ -55,6 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
   addBtn.addEventListener('click', openDrawer);
   cancelBtn.addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeDrawer();
+    }
+  });
 
   birthDateInput.addEventListener('input', maskDateInput);
   deathDateInput.addEventListener('input', maskDateInput);
