@@ -97,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPeople();
       });
     });
+
+    renderTree(people);
   }
 
   function populateRelationshipOptions(currentId = null) {
