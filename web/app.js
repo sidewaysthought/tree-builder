@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('person-form');
   const cancelBtn = document.getElementById('cancel-btn');
   const tableBody = document.getElementById('people-body');
+  const birthDateInput = document.getElementById('birth-date');
+  const deathDateInput = document.getElementById('death-date');
 
   function renderPeople() {
     tableBody.innerHTML = '';
@@ -35,12 +37,34 @@ document.addEventListener('DOMContentLoaded', () => {
     drawer.classList.add('translate-y-full');
   }
 
+  function maskDateInput(e) {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+    let result = '';
+    if (v.length > 0) {
+      result = v.slice(0, 4);
+      if (v.length > 4) {
+        result += '-' + v.slice(4, 6);
+        if (v.length > 6) {
+          result += '-' + v.slice(6, 8);
+        }
+      }
+    }
+    e.target.value = result;
+  }
+
   addBtn.addEventListener('click', openDrawer);
   cancelBtn.addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
 
+  birthDateInput.addEventListener('input', maskDateInput);
+  deathDateInput.addEventListener('input', maskDateInput);
+
   form.addEventListener('submit', e => {
     e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
     const data = new FormData(form);
     const person = {
       id: nextId++,
