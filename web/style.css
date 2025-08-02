@@ -2,3 +2,20 @@
 .drawer {
   transition: transform 0.3s ease-in-out;
 }
+
+dialog.drawer {
+  position: fixed;
+  inset: auto 0 0 0;
+  width: 100%;
+  margin: 0;
+  border: none;
+  transform: translateY(100%);
+}
+
+dialog.drawer[open] {
+  transform: translateY(0);
+}
+
+dialog.drawer::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
