@@ -11,9 +11,10 @@
   <header class="bg-gray-800 text-white p-4">
     <h1 class="text-xl font-bold">Family Tree Builder</h1>
   </header>
-  <main class="p-4">
-    <p class="mb-4">Use the buttons to manage your family tree. Start by adding a person.</p>
-    <div class="flex flex-wrap gap-2 mb-4">
+  <main class="flex p-4">
+    <section class="w-full md:w-1/2 pr-4">
+      <p class="mb-4">Use the buttons to manage your family tree. Start by adding a person.</p>
+      <div class="flex flex-wrap gap-2 mb-4">
       <button id="add-btn" class="inline-flex items-center rounded bg-gray-800 px-4 py-2 text-white">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -38,22 +39,24 @@
         </svg>
         <span>Import</span>
       </button>
-    </div>
-    <div class="overflow-x-auto bg-white rounded shadow">
-      <table class="min-w-full text-left" aria-live="polite">
-        <thead class="bg-gray-50">
-          <tr>
-            <th scope="col" class="px-4 py-2">ID</th>
-            <th scope="col" class="px-4 py-2">First Names</th>
-            <th scope="col" class="px-4 py-2">Last Names</th>
-            <th scope="col" class="px-4 py-2">Parents</th>
-            <th scope="col" class="px-4 py-2">Partner</th>
-            <th scope="col" class="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="people-body"></tbody>
-      </table>
-    </div>
+      </div>
+      <div class="overflow-x-auto bg-white rounded shadow">
+        <table class="min-w-full text-left" aria-live="polite">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-4 py-2">ID</th>
+              <th scope="col" class="px-4 py-2">First Names</th>
+              <th scope="col" class="px-4 py-2">Last Names</th>
+              <th scope="col" class="px-4 py-2">Parents</th>
+              <th scope="col" class="px-4 py-2">Partner</th>
+              <th scope="col" class="px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="people-body"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="hidden md:block md:w-1/2"></section>
   </main>
 
   <dialog id="drawer" class="drawer fixed inset-x-0 bottom-0 bg-white rounded-t-lg p-4" aria-labelledby="add-person-heading">
