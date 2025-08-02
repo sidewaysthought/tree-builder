@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const deathDateInput = document.getElementById('death-date');
   const firstNamesInput = document.getElementById('first-names');
   const lastNamesInput = document.getElementById('last-names');
+  const maidenNameInput = document.getElementById('maiden-name');
   const birthPlaceInput = document.getElementById('birth-place');
   const deathPlaceInput = document.getElementById('death-place');
   const genderSelect = document.getElementById('gender');
@@ -118,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       idInput.value = person.id ?? '';
       firstNamesInput.value = person.firstNames || '';
       lastNamesInput.value = person.lastNames || '';
+      maidenNameInput.value = person.maidenName || '';
       birthDateInput.value = person.birthDate || '';
       deathDateInput.value = person.deathDate || '';
       birthPlaceInput.value = person.birthPlace || '';
@@ -159,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (person) {
         person.firstNames = data.get('firstNames') || '';
         person.lastNames = data.get('lastNames') || '';
+        person.maidenName = data.get('maidenName') || '';
         person.birthDate = data.get('birthDate') || '';
         person.deathDate = data.get('deathDate') || '';
         person.birthPlace = data.get('birthPlace') || '';
@@ -173,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         id: nextId++,
         firstNames: data.get('firstNames') || '',
         lastNames: data.get('lastNames') || '',
+        maidenName: data.get('maidenName') || '',
         birthDate: data.get('birthDate') || '',
         deathDate: data.get('deathDate') || '',
         birthPlace: data.get('birthPlace') || '',
