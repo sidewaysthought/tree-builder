@@ -31,10 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="px-4 py-2">${person.id}</td>
-        <td class="px-4 py-2">${person.firstName}</td>
-        <td class="px-4 py-2">${person.lastName}</td>
-        <td class="px-4 py-2">${parent ? parent.firstName + ' ' + parent.lastName : ''}</td>
-        <td class="px-4 py-2">${partner ? partner.firstName + ' ' + partner.lastName : ''}</td>
+        <td class="px-4 py-2">${person.firstName || ''}</td>
+        <td class="px-4 py-2">${person.lastName || ''}</td>
+        <td class="px-4 py-2">${parent ? (parent.firstName || '') + ' ' + (parent.lastName || '') : ''}</td>
+        <td class="px-4 py-2">${partner ? (partner.firstName || '') + ' ' + (partner.lastName || '') : ''}</td>
         <td class="px-4 py-2 flex gap-1">
           <button data-id="${person.id}" class="edit-btn inline-flex items-center rounded bg-gray-200 px-2 py-1 text-gray-800">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     partnerSelect.innerHTML = '<option value="">Select</option>';
     for (const p of people) {
       if (p.id === currentId) continue;
-      const label = `${p.id}: ${p.lastName}, ${p.firstName} (${p.birthDate} - ${p.deathDate})`;
+      const label = `${p.id}: ${p.lastName || ''}, ${p.firstName || ''} (${p.birthDate || ''} - ${p.deathDate || ''})`;
       const parentOption = document.createElement('option');
       parentOption.value = p.id;
       parentOption.textContent = label;
@@ -95,16 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
     populateRelationshipOptions(person ? person.id : null);
     if (person) {
       heading.textContent = 'Edit Person';
-      idInput.value = person.id;
-      firstNameInput.value = person.firstName;
-      lastNameInput.value = person.lastName;
-      birthDateInput.value = person.birthDate;
-      deathDateInput.value = person.deathDate;
-      birthPlaceInput.value = person.birthPlace;
-      deathPlaceInput.value = person.deathPlace;
-      genderSelect.value = person.gender;
-      parentSelect.value = person.parentId || '';
-      partnerSelect.value = person.partnerId || '';
+      idInput.value = person.id ?? '';
+      firstNameInput.value = person.firstName || '';
+      lastNameInput.value = person.lastName || '';
+      birthDateInput.value = person.birthDate || '';
+      deathDateInput.value = person.deathDate || '';
+      birthPlaceInput.value = person.birthPlace || '';
+      deathPlaceInput.value = person.deathPlace || '';
+      genderSelect.value = person.gender || '';
+      parentSelect.value = person.parentId ?? '';
+      partnerSelect.value = person.partnerId ?? '';
     } else {
       heading.textContent = 'Add Person';
       form.reset();
