@@ -13,12 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const tableBody = document.getElementById('people-body');
   const birthDateInput = document.getElementById('birth-date');
   const deathDateInput = document.getElementById('death-date');
-  const firstNameInput = document.getElementById('first-name');
-  const lastNameInput = document.getElementById('last-name');
+  const firstNamesInput = document.getElementById('first-names');
+  const lastNamesInput = document.getElementById('last-names');
   const birthPlaceInput = document.getElementById('birth-place');
   const deathPlaceInput = document.getElementById('death-place');
   const genderSelect = document.getElementById('gender');
-  const parentSelect = document.getElementById('parent-id');
+  const parent1Select = document.getElementById('parent1-id');
+  const parent2Select = document.getElementById('parent2-id');
   const partnerSelect = document.getElementById('partner-id');
   const idInput = document.getElementById('person-id');
   const heading = document.getElementById('add-person-heading');
@@ -26,15 +27,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderPeople() {
     tableBody.innerHTML = '';
     for (const person of people) {
-      const parent = people.find(p => p.id === person.parentId);
+      const parent1 = people.find(p => p.id === person.parent1Id);
+      const parent2 = people.find(p => p.id === person.parent2Id);
       const partner = people.find(p => p.id === person.partnerId);
+      const parentsLabel = [parent1, parent2]
+        .filter(Boolean)
+        .map(p => `${p.firstNames || ''} ${p.lastNames || ''}`)
+        .join(', ');
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="px-4 py-2">${person.id}</td>
-        <td class="px-4 py-2">${person.firstName || ''}</td>
-        <td class="px-4 py-2">${person.lastName || ''}</td>
-        <td class="px-4 py-2">${parent ? (parent.firstName || '') + ' ' + (parent.lastName || '') : ''}</td>
-        <td class="px-4 py-2">${partner ? (partner.firstName || '') + ' ' + (partner.lastName || '') : ''}</td>
+        <td class="px-4 py-2">${person.firstNames || ''}</td>
+        <td class="px-4 py-2">${person.lastNames || ''}</td>
+        <td class="px-4 py-2">${parentsLabel}</td>
+        <td class="px-4 py-2">${partner ? (partner.firstNames || '') + ' ' + (partner.lastNames || '') : ''}</td>
         <td class="px-4 py-2 flex gap-1">
           <button data-id="${person.id}" class="edit-btn inline-flex items-center rounded bg-gray-200 px-2 py-1 text-gray-800">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -66,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = parseInt(btn.dataset.id, 10);
         people = people.filter(p => p.id !== id);
         for (const p of people) {
-          if (p.parentId === id) p.parentId = undefined;
+          if (p.parent1Id === id) p.parent1Id = undefined;
+          if (p.parent2Id === id) p.parent2Id = undefined;
           if (p.partnerId === id) p.partnerId = undefined;
         }
         renderPeople();
@@ -75,19 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function populateRelationshipOptions(currentId = null) {
-    parentSelect.innerHTML = '<option value="">Select</option>';
+    parent1Select.innerHTML = '<option value="">Select</option>';
+    parent2Select.innerHTML = '<option value="">Select</option>';
     partnerSelect.innerHTML = '<option value="">Select</option>';
     for (const p of people) {
       if (p.id === currentId) continue;
-      const label = `${p.id}: ${p.lastName || ''}, ${p.firstName || ''} (${p.birthDate || ''} - ${p.deathDate || ''})`;
-      const parentOption = document.createElement('option');
-      parentOption.value = p.id;
-      parentOption.textContent = label;
-      parentSelect.appendChild(parentOption);
-      const partnerOption = document.createElement('option');
-      partnerOption.value = p.id;
-      partnerOption.textContent = label;
-      partnerSelect.appendChild(partnerOption);
+      const label = `${p.id}: ${p.lastNames || ''}, ${p.firstNames || ''} (${p.birthDate || ''} - ${p.deathDate || ''})`;
+      parent1Select.appendChild(new Option(label, p.id));
+      parent2Select.appendChild(new Option(label, p.id));
+      partnerSelect.appendChild(new Option(label, p.id));
     }
   }
 
@@ -96,14 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (person) {
       heading.textContent = 'Edit Person';
       idInput.value = person.id ?? '';
-      firstNameInput.value = person.firstName || '';
-      lastNameInput.value = person.lastName || '';
+      firstNamesInput.value = person.firstNames || '';
+      lastNamesInput.value = person.lastNames || '';
       birthDateInput.value = person.birthDate || '';
       deathDateInput.value = person.deathDate || '';
       birthPlaceInput.value = person.birthPlace || '';
       deathPlaceInput.value = person.deathPlace || '';
       genderSelect.value = person.gender || '';
-      parentSelect.value = person.parentId ?? '';
+      parent1Select.value = person.parent1Id ?? '';
+      parent2Select.value = person.parent2Id ?? '';
       partnerSelect.value = person.partnerId ?? '';
     } else {
       heading.textContent = 'Add Person';
@@ -113,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.classList.remove('hidden');
     overlay.setAttribute('aria-hidden', 'false');
     drawer.classList.remove('translate-y-full');
-    firstNameInput.focus();
+    firstNamesInput.focus();
   }
 
   function closeDrawer() {
@@ -161,27 +165,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (id) {
       const person = people.find(p => p.id === parseInt(id, 10));
       if (person) {
-        person.firstName = data.get('firstName') || '';
-        person.lastName = data.get('lastName') || '';
+        person.firstNames = data.get('firstNames') || '';
+        person.lastNames = data.get('lastNames') || '';
         person.birthDate = data.get('birthDate') || '';
         person.deathDate = data.get('deathDate') || '';
         person.birthPlace = data.get('birthPlace') || '';
         person.deathPlace = data.get('deathPlace') || '';
         person.gender = data.get('gender') || '';
-        person.parentId = data.get('parentId') ? parseInt(data.get('parentId'), 10) : undefined;
+        person.parent1Id = data.get('parent1Id') ? parseInt(data.get('parent1Id'), 10) : undefined;
+        person.parent2Id = data.get('parent2Id') ? parseInt(data.get('parent2Id'), 10) : undefined;
         person.partnerId = data.get('partnerId') ? parseInt(data.get('partnerId'), 10) : undefined;
       }
     } else {
       const person = {
         id: nextId++,
-        firstName: data.get('firstName') || '',
-        lastName: data.get('lastName') || '',
+        firstNames: data.get('firstNames') || '',
+        lastNames: data.get('lastNames') || '',
         birthDate: data.get('birthDate') || '',
         deathDate: data.get('deathDate') || '',
         birthPlace: data.get('birthPlace') || '',
         deathPlace: data.get('deathPlace') || '',
         gender: data.get('gender') || '',
-        parentId: data.get('parentId') ? parseInt(data.get('parentId'), 10) : undefined,
+        parent1Id: data.get('parent1Id') ? parseInt(data.get('parent1Id'), 10) : undefined,
+        parent2Id: data.get('parent2Id') ? parseInt(data.get('parent2Id'), 10) : undefined,
         partnerId: data.get('partnerId') ? parseInt(data.get('partnerId'), 10) : undefined
       };
       people.push(person);
