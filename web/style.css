@@ -19,3 +19,8 @@ dialog.drawer[open] {
 dialog.drawer::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
+
+/* Tree visualization styles */
+#tree text {
+  font-size: 1rem;
+}

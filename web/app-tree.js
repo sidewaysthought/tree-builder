@@ -74,7 +74,9 @@ function renderTree(people) {
 
   svg.selectAll('*').remove();
 
-  svg
+  const g = svg.append('g');
+
+  g
     .append('g')
     .attr('fill', 'none')
     .attr('stroke', '#555')
@@ -94,7 +96,7 @@ function renderTree(people) {
       }
     }
   });
-  svg
+  g
     .append('g')
     .attr('stroke', '#1d4ed8')
     .selectAll('line')
@@ -105,11 +107,12 @@ function renderTree(people) {
     .attr('x2', d => d.target.x)
     .attr('y2', d => d.target.y);
 
-  const nodes = svg
+  const nodes = g
     .append('g')
     .selectAll('g')
     .data(root.descendants())
     .join('g')
+    .attr('class', 'person')
     .attr('transform', d => `translate(${d.x},${d.y})`);
 
   nodes
@@ -141,4 +144,14 @@ function renderTree(people) {
       d =>
         `${(d.data.birthDate || '').slice(0, 4)} - ${(d.data.deathDate || '').slice(0, 4)}`
     );
+
+  const zoom = d3
+    .zoom()
+    .scaleExtent([0.5, 2])
+    .filter(event => event.type === 'wheel' || !event.target.closest('.person'))
+    .on('zoom', event => {
+      g.attr('transform', event.transform);
+    });
+
+  svg.call(zoom);
 }
