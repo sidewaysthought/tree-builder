@@ -68,9 +68,10 @@ function renderTree(people) {
 
   const svg = d3
     .select('#tree')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', `0 0 ${width} ${height}`);
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('viewBox', `0 0 ${width} ${height}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
 
   svg.selectAll('*').remove();
 
